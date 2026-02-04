@@ -1,0 +1,185 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine</title>
+
+<style>
+body {
+font-family:'Poppins',sans-serif;
+background: linear-gradient(135deg,#f76c6c,#ff9aa2);
+margin:0;
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+text-align:center;
+color:white;
+overflow:hidden;
+position:relative;
+}
+
+button{
+padding:12px 22px;
+font-size:16px;
+border:none;
+border-radius:8px;
+margin-top:25px;
+cursor:pointer;
+}
+
+#yes{
+background:#ff6b81;
+color:white;
+opacity:0.6;
+pointer-events:none;
+}
+
+#no{
+background:#ffe66d;
+color:#333;
+position:absolute;
+}
+
+.heart{
+position:absolute;
+animation:floatUp 5s linear forwards;
+font-size:20px;
+}
+
+.confetti{
+position:absolute;
+width:8px;
+height:8px;
+background-color: #fff;
+opacity:0.9;
+border-radius:50%;
+}
+
+@keyframes floatUp{
+from{transform:translateY(100vh);opacity:1;}
+to{transform:translateY(-50px);opacity:0;}
+}
+</style>
+</head>
+<body>
+
+<!-- Audio tag for your trimmed snippet -->
+<audio id="music" loop>
+<source src="love_snippet.mp3" type="audio/mpeg">
+</audio>
+
+<div id="content" style="max-width:85%;">
+<h1>Hey Ayyna…</h1>
+<button onclick="nextStep(1)">Continue ❤️</button>
+</div>
+
+<script>
+let step = 0;
+let noClicks = 0;
+
+function nextStep(n){
+step = n;
+const c = document.getElementById("content");
+
+if(step===1){
+c.innerHTML=`
+<h2>We've shared 10 years…</h2>
+<p>Memories, laughter, fights, healing, and choosing each other again and again.</p>
+<button onclick="nextStep(2)">Next ✨</button>`;
+}
+
+if(step===2){
+c.innerHTML=`
+<h2>I have one question…</h2>
+<p>And honestly, you already know the answer.</p>
+<button onclick="nextStep(3)">I’m ready 😌</button>`;
+}
+
+if(step===3){
+c.innerHTML=`
+<h1>WILL YOU BE MY VALENTINE?</h1>
+<button id="yes" onclick="yesClicked()">Yes ❤️</button>
+<button id="no" onmouseover="moveNo()" onclick="confettiBurst()">No 😅</button>`;
+}
+}
+
+function moveNo(){
+const noBtn = document.getElementById("no");
+noBtn.style.left = Math.random()*(window.innerWidth-80)+"px";
+noBtn.style.top = Math.random()*(window.innerHeight-40)+"px";
+
+noClicks++;
+if(noClicks >= 3){
+const yesBtn = document.getElementById("yes");
+yesBtn.style.opacity = 1;
+yesBtn.style.pointerEvents = "auto";
+}
+}
+
+function createHeart(){
+const h = document.createElement("div");
+h.className="heart";
+h.innerText="❤️";
+h.style.left=Math.random()*window.innerWidth+"px";
+document.body.appendChild(h);
+setTimeout(()=>h.remove(),5000);
+}
+
+function createCursorHeart(x,y){
+const h=document.createElement("div");
+h.className="heart";
+h.innerText="💖";
+h.style.left=x+"px";
+h.style.top=y+"px";
+h.style.fontSize=(15+Math.random()*10)+"px";
+document.body.appendChild(h);
+setTimeout(()=>h.remove(),1500);
+}
+
+function confettiBurst(){
+for(let i=0;i<20;i++){
+const c = document.createElement("div");
+c.className="confetti";
+c.style.left = (Math.random()*window.innerWidth)+"px";
+c.style.top = (Math.random()*window.innerHeight)+"px";
+c.style.backgroundColor = `hsl(${Math.random()*360},100%,70%)`;
+document.body.appendChild(c);
+setTimeout(()=>c.remove(),800);
+}
+moveNo();
+}
+
+function yesClicked(){
+// Create new audio and play it (avoids removal issue)
+const music = new Audio('love_snippet.mp3');
+music.loop = true;
+music.play();
+
+// Now show final congratulations
+document.body.innerHTML=`
+<div style="max-width:90%; padding:20px;">
+<h1 style="color:#FFD700; font-size:36px; font-weight:bold; margin-bottom:10px;">
+<span style="font-size:60px; line-height:1; vertical-align:top;">C</span>ONGRATULATIONS, AYNA! 💖
+</h1>
+<h2 style="color:#00FFFF; font-size:30px; font-weight:bold; margin-bottom:15px;">
+<span style="font-size:50px; line-height:1; vertical-align:top;">Y</span>OU’RE NOW SAMEER’S VALENTINE 🥰
+</h2>
+<p style="color:#fff0f5; font-size:16px; line-height:1.6;">
+No escape now — officially trapped in my love cage ❤️
+</p>
+<p style="color:#fff0f5; font-size:16px; line-height:1.6;">
+Ten years of memories, laughter, and love — and still choosing each other every day 😘
+</p>
+<p style="color:#fff0f5; font-size:16px; line-height:1.6;">
+I’m really glad you finally said YES! 🥳
+</p>
+</div>`;
+
+setInterval(createHeart, 300);
+document.body.addEventListener('mousemove', e=>{createCursorHeart(e.clientX,e.clientY)});
+}
+</script>
+</body>
+</html>
